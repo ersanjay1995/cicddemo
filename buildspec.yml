@@ -20,12 +20,13 @@ phases:
       - npm install -g cloudformation-yml-merger-cli
       - cloudformation-yml-merger-cli -i tomerge -o tmp-merged-template.yml
       -  grep '^[[:space:]]*#.*TOKEN' template.yml  | sed 's/^[[:space:]]*#[[:space:]]*//g'|awk -F= 'FNR==NR {key=$1; $1=""; array[key]=substr($0,2); next } { for (i in array) gsub(i, array[i]) }1' - tmp-merged-template.yml > merged-template.yml
-      - rm -rf tomerge
+      - rm -rf tomerge tmp-merged-template.yml
       - npm uninstall -g cloudformation-yml-merger-cli
-      - cat merged-template.yml
+      - mv merged-template.yml template.yml
+      - cat template.yml
       # Use AWS SAM to package the application by using AWS CloudFormation
       #- aws cloudformation package --template merged-template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
-      - sam package --template merged-template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
+      - sam package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
       # Use AWS SAM to install cruft
       #- aws cloudformation deploy --capabilities CAPABILITY_IAM --template-file template-export.yml --stack-name mnp-t2
       - echo ===========================================================naya==================================
