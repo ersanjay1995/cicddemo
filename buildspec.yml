@@ -16,7 +16,8 @@ phases:
     commands:
       - export # expose
       # try buildspecs
-      - aws codebuild start-build --project-name mnp-t2 --buildspec-override lambda-f3/buildspec.yml --artifacts-override type=NO_ARTIFACTS |jq -r ".build.id" >bid
+      - npm install -g node-jq
+      - aws codebuild start-build --project-name mnp-t2 --source-version $CODEBUILD_SOURCE_VERSION --buildspec-override lambda-f3/buildspec.yml --artifacts-override type=NO_ARTIFACTS |jq -r ".build.id" >bid
       - aws codebuild batch-get-builds --ids $(cat bid)
       # merge em
       - mkdir tomerge
