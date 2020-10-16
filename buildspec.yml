@@ -18,6 +18,11 @@ phases:
       - aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
       # Use AWS SAM to install cruft
       - aws cloudformation deploy --capabilities CAPABILITY_IAM --template-file template-export.yml --stack-name mnp-t2
+      # ======================F2======================
+      # Use AWS SAM to package the application by using AWS CloudFormation
+      - aws cloudformation package --template lambda-f2/template.yml --s3-bucket $S3_BUCKET --output-template lambda-f2/template-export.yml
+      # Use AWS SAM to install cruft
+      - aws cloudformation deploy --capabilities CAPABILITY_IAM --template-file lambda-f2/template-export.yml --stack-name mnp-t2
       
 artifacts:
   type: zip
