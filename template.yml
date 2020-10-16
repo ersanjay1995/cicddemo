@@ -3,7 +3,8 @@
 
 # The AWSTemplateFormatVersion identifies the capabilities of the template
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/format-version-structure.html
-AWSTemplateFormatVersion: 2010-09-09
+ # tfv_TOKEN=2010-09-09
+AWSTemplateFormatVersion: tfv_TOKEN
 Description: >-
   
 
