@@ -28,8 +28,8 @@ Resources:
   helloFromLambdaFunctionF2:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./
-      Handler: lambda-f2/src/handlers/hello-from-lambda-f2.helloFromLambdaHandler
+      CodeUri: ./lambda-f2/
+      Handler: src/handlers/hello-from-lambda-f2.helloFromLambdaHandler
       Runtime: nodejs10.x
       MemorySize: 128
       Timeout: 60
