@@ -18,7 +18,8 @@ phases:
       - mkdir tomerge
       - find . -name template.yml | sed -e "p; s:/:__:g; s:^:tomerge/:g" | xargs -n2 cp
       - npm install -g cloudformation-yml-merger-cli
-      - cloudformation-yml-merger-cli -i tomerge -o merged-template.yml
+      - cloudformation-yml-merger-cli -i tomerge -o tmp-merged-template.yml
+      -  grep '^[[:space:]]*#.*TOKEN' template.yml  | sed 's/^[[:space:]]*#[[:space:]]*//g'|awk -F= 'FNR==NR {key=$1; $1=""; array[key]=substr($0,2); next } { for (i in array) gsub(i, array[i]) }1' - tmp-merged-template.yml > merged-template.yml
       - rm -rf tomerge
       - npm uninstall -g cloudformation-yml-merger-cli
       - cat merged-template.yml

@@ -1,0 +1,1 @@
+permstring_TOKEN=!Sub 'arn:${AWS::Partition}:iam::${AWS::AccountId}:policy/${AppId}-${AWS::Region}-PermissionsBoundary'
