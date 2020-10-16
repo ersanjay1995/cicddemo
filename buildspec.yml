@@ -15,7 +15,7 @@ phases:
   build:
     commands:
       # try buildspecs
-      - aws codebuild start-build --project-name mnp-t2 --source-location-override $CODEBUILD_SRC_DIR/lambda-f3 --buildspec-override lambda-f3/buildspec.yml --artifacts-override type=NO_ARTIFACTS
+      - aws codebuild start-build --project-name mnp-t2 --buildspec-override lambda-f3/buildspec.yml --artifacts-override type=NO_ARTIFACTS
       # merge em
       - mkdir tomerge
       - find . -name template.yml | sed -e "p; s:/:__:g; s:^:tomerge/:g" | xargs -n2 cp
