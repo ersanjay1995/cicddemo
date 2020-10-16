@@ -1,5 +1,5 @@
 // Import all functions from hello-from-lambda.js
-const lambda = require('../../../src/handlers/hello-from-lambda.js');
+const lambda = require('../../../src/handlers/hello-from-lambda-f2.js');
 
 describe('Test for hello-from-lambda', () => {
     // This test invokes the hello-from-lambda Lambda function and compares the result
