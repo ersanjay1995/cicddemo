@@ -7,16 +7,16 @@ phases:
   pre_build:
     commands:
       # Discover and run unit tests in the '__tests__' directory
-      - npm run test
+      #- npm run test
       # Remove all unit tests to reduce the size of the package that will be ultimately uploaded to Lambda
-      - rm -rf ./__tests__
+      #- rm -rf ./__tests__
       # Remove all dependencies not needed for the Lambda deployment package (the packages from devDependencies in package.json)
-      - npm prune --production
+      #- npm prune --production
   build:
     commands:
       - export # expose
       # try buildspecs
-      - npm install -g node-jq
+      - yum install -y jq
       - aws codebuild start-build --project-name mnp-t2 --source-version $CODEBUILD_SOURCE_VERSION --buildspec-override lambda-f3/buildspec.yml --artifacts-override type=NO_ARTIFACTS |jq -r ".build.id" >bid
       - aws codebuild batch-get-builds --ids $(cat bid)
       # merge em
