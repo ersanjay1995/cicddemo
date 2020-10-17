@@ -17,15 +17,18 @@ phases:
       - export # expose
       # try buildspecs
       - yum install -y jq
-      - aws codebuild start-build --project-name mnp-t2 --source-version $CODEBUILD_SOURCE_VERSION --buildspec-override lambda-f3/buildspec.yml --artifacts-override type=NO_ARTIFACTS |jq -r ".build.id" >bid
-      - sleep 120
-      - aws codebuild batch-get-builds --ids $(cat bid) | jq -r ".builds[0].buildStatus" 
+      - aws codebuild start-build --project-name mnp-t2 --source-version $CODEBUILD_SOURCE_VERSION --buildspec-override lambda-f3/buildspec.yml --artifacts-override type=s3 |jq -r ".build.id" >bid
+      - sleep 15
+      - until aws codebuild batch-get-builds --ids $(cat bid) | jq -r ".builds[0].buildStatus" | grep -q "SUCCEEDED"; do sleep 1; done;
       #| grep "IN_PROGRESS" 
+      # show sub-codebuild
+      - aws codebuild batch-get-builds --ids $(cat bid)
       # merge em
       - mkdir tomerge
       - find . -name template.yml | sed -e "p; s:/:__:g; s:^:tomerge/:g" | xargs -n2 cp
       - npm install -g cloudformation-yml-merger-cli
       - cloudformation-yml-merger-cli -i tomerge -o tmp-merged-template.yml
+      # apply tokens
       -  grep '^[[:space:]]*#.*TOKEN' template.yml  | sed 's/^[[:space:]]*#[[:space:]]*//g'|awk -F= 'FNR==NR {key=$1; $1=""; array[key]=substr($0,2); next } { for (i in array) gsub(i, array[i]) }1' - tmp-merged-template.yml > merged-template.yml
       - rm -rf tomerge tmp-merged-template.yml
       - npm uninstall -g cloudformation-yml-merger-cli
