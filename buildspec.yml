@@ -25,8 +25,7 @@ phases:
       - aws codebuild batch-get-builds --ids $(cat bid)
       - f3yml=$(aws codebuild batch-get-builds --ids $(cat bid) |  jq -r ".builds[0].artifacts.location")/template-export.yml
       - echo $f3yml
-      - aws s3 cp s3://${f3yml##*:::} lambda-f3/template-export.yml
-      - ls -ltra lambda-f3
+      - aws s3 cp s3://${f3yml##*:::} lambda-f3/template.yml
       # merge em
       - mkdir tomerge
       - find . -name template.yml | sed -e "p; s:/:__:g; s:^:tomerge/:g" | xargs -n2 cp
