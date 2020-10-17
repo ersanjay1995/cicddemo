@@ -1,9 +1,11 @@
 version: 0.2
 phases:
+  init:
+    commands:
+      - cd ${CODEBUILD_SRC_DIR}/lambda-f3/
   install:
     commands:
       # Install all dependencies (including dependencies for running tests)
-      - cd lambda-f3/
       - npm install
   pre_build:
     commands:
@@ -25,4 +27,4 @@ phases:
       - pwd
 artifacts:
   files:
-    - template-export.yml
+    - lambda-f3/template-export.yml

@@ -28,7 +28,7 @@ Resources:
   helloFromLambdaFunctionF3:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./lambda-f3/
+      CodeUri: ${CODEBUILD_SRC_DIR}/lambda-f3/
       Handler: src/handlers/hello-from-lambda-f3.helloFromLambdaHandler
       Runtime: nodejs10.x
       MemorySize: 128
