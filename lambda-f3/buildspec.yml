@@ -21,6 +21,5 @@ phases:
       - cd /
       - pwd
 artifacts:
-  type: zip
   files:
     - template-export.yml
