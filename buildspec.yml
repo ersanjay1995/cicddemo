@@ -18,7 +18,9 @@ phases:
       # try buildspecs
       - yum install -y jq
       - aws codebuild start-build --project-name mnp-t2 --source-version $CODEBUILD_SOURCE_VERSION --buildspec-override lambda-f3/buildspec.yml --artifacts-override type=NO_ARTIFACTS |jq -r ".build.id" >bid
-      - aws codebuild batch-get-builds --ids $(cat bid)
+      - sleep 120
+      - aws codebuild batch-get-builds --ids $(cat bid) | jq -r ".builds[0].buildStatus" 
+      #| grep "IN_PROGRESS" 
       # merge em
       - mkdir tomerge
       - find . -name template.yml | sed -e "p; s:/:__:g; s:^:tomerge/:g" | xargs -n2 cp
