@@ -16,11 +16,10 @@ phases:
       - npm prune --production
   build:
     commands:
-      # patch codeuri in template.yml to be relative to buildspec.
-      - sed -i -r 's/^(\s*)(CodeUri:.*$)/\1CodeUri: .//' template.yml
-      - cat template.yml
+      # move template to parent for correcting paths within template
+      - mv template.yml ../
       # Use AWS SAM to package the application by using AWS CloudFormation
-      - aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml 
+      - aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template ../template-export.yml 
 artifacts:
   files:
     - template-export.yml

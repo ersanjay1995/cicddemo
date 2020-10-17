@@ -28,7 +28,6 @@ Resources:
   helloFromLambdaFunctionF3:
     Type: AWS::Serverless::Function
     Properties:
-      # Note: CodeUri is overriden(sed) if present in buildspecs.
       CodeUri: ./lambda-f3/
       Handler: src/handlers/hello-from-lambda-f3.helloFromLambdaHandler
       Runtime: nodejs10.x
