@@ -17,7 +17,7 @@ phases:
       - export # expose
       # try buildspecs
       - yum install -y jq
-      - ls -l | egrep '^d' | awk '{print $9}' | xargs bash applied_build_spec.sh 
+      - ls -l | egrep '^d' | awk '{print $9}' | xargs bash -x applied_build_spec.sh 
       # merge em
       - mkdir tomerge
       - find . -name template.yml | sed -e "p; s:/:__:g; s:^:tomerge/:g" | xargs -n2 cp
