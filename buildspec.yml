@@ -17,7 +17,7 @@ phases:
       - export # expose
       # try buildspecs
       - yum install -y jq
-      - aws codebuild start-build --project-name mnp-t2 --source-version $CODEBUILD_SOURCE_VERSION --buildspec-override lambda-f3/buildspec.yml --artifacts-override type=s3,location=$S3_BUCKET,name=$(cut -d/ -f2-4 <<< $CODEBUILD_SOURCE_VERSION)_op |jq -r ".build.id" >bid
+      - aws codebuild start-build --project-name mnp-t2 --source-version $CODEBUILD_SOURCE_VERSION --buildspec-override lambda-f3/buildspec.yml --artifacts-override type=s3,location=$S3_BUCKET,path=$(cut -d/ -f2-4 <<< $CODEBUILD_SOURCE_VERSION)_op |jq -r ".build.id" >bid
       - sleep 15; maxTime=45;
       - until aws codebuild batch-get-builds --ids $(cat bid) | jq -r ".builds[0].buildStatus" | grep -q "SUCCEEDED"; do sleep 1;if [[ $((maxTime--)) -lt 0 ]]; then echo Timedout; exit 1; fi;  done;
       #| grep "IN_PROGRESS" 
