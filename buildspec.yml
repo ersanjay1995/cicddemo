@@ -23,8 +23,9 @@ phases:
       #| grep "IN_PROGRESS" 
       # show sub-codebuild
       - aws codebuild batch-get-builds --ids $(cat bid)
-      - echo $(aws codebuild batch-get-builds --ids $(cat bid) |  jq -r ".builds[0].artifacts.location")/template-export.yml
-      - aws s3 cp $(aws codebuild batch-get-builds --ids $(cat bid) |  jq -r ".builds[0].artifacts.location")/template-export.yml lambda-f3/template-export.yml
+      - f3yml=$(aws codebuild batch-get-builds --ids $(cat bid) |  jq -r ".builds[0].artifacts.location")/template-export.yml
+      - echo $f3yml
+      - aws s3 cp s3://${f3yml##*:::} lambda-f3/template-export.yml
       - ls -ltra lambda-f3
       # merge em
       - mkdir tomerge
