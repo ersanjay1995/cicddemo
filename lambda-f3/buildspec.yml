@@ -1,10 +1,9 @@
 version: 0.2
 phases:
-  init:
-    commands:
-      - cd ${CODEBUILD_SRC_DIR}/lambda-f3/
   install:
     commands:
+      # init:
+      - cd ${CODEBUILD_SRC_DIR}/lambda-f3/
       # Install all dependencies (including dependencies for running tests)
       - npm install
   pre_build:
