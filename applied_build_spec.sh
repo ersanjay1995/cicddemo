@@ -5,7 +5,6 @@ if test -f "$FILE"; then
 else 
    exit
 fi
-
   aws codebuild start-build --project-name mnp-t2 --source-version $CODEBUILD_SOURCE_VERSION --buildspec-override $1/buildspec.yml --artifacts-override type=s3,location=$S3_BUCKET,path=$(cut -d/ -f2-4 <<< $CODEBUILD_SOURCE_VERSION)_op |jq -r ".build.id" >$1/bid
        sleep 15; maxTime=45;
        until aws codebuild batch-get-builds --ids $(cat $1/bid) | jq -r ".builds[0].buildStatus" | grep -q "SUCCEEDED"; do sleep 1;if [[ $((maxTime--)) -lt 0 ]]; then echo Timedout; exit 1; fi;  done;
