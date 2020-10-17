@@ -3,7 +3,7 @@ FILE=$1/buildspec.yml
 if test -f "$FILE"; then
     echo "$FILE applying build spec ."
 else 
-   exit
+   exit 0
 fi
   aws codebuild start-build --project-name mnp-t2 --source-version $CODEBUILD_SOURCE_VERSION --buildspec-override $1/buildspec.yml --artifacts-override type=s3,location=$S3_BUCKET,path=$(cut -d/ -f2-4 <<< $CODEBUILD_SOURCE_VERSION)_op |jq -r ".build.id" >$1/bid
        sleep 15; maxTime=45;
