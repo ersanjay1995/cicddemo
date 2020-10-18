@@ -13,7 +13,7 @@ describe('Test for hello-from-lambda', () => {
                 If you change from `const message = 'Hello from Lambda!';` to `const message = 'Hello World!';` in hello-from-lambda.js,
                 you should change the following line to `const expectedResult = 'Hello World!';`
         */
-        const expectedResult = 'Hello from Lambda-F3-4!';
+        const expectedResult = '{"ok": "very cool"}';
 
         // Compare the result with the expected result
         expect(result).toEqual(expectedResult);

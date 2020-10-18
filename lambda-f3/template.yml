@@ -30,10 +30,18 @@ Resources:
     Properties:
       CodeUri: ./lambda-f3/
       Handler: src/handlers/hello-from-lambda-f3.helloFromLambdaHandler
-      Runtime: nodejs10.x  # you can choose any python version python3.8.
+      Runtime: nodejs10.x
       MemorySize: 128
       Timeout: 60
       Description: A Lambda function that returns a static string.
       Policies:
         # Give Lambda basic execution Permission to the helloFromLambda
         - AWSLambdaBasicExecutionRole
+      Events:
+        helloFromLambdaF3FunctionApi:
+          Type: Api
+          Properties:
+            # restapi_TOKEN=!Ref BasicAWSApiGateway
+            RestApiId: restapi_TOKEN
+            Path: /lambda-f3
+            Method: GET
