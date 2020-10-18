@@ -2,25 +2,15 @@ version: 0.2
 phases:
   install:
     commands:
-      # Install all dependencies (including dependencies for running tests)
-      - npm install
-  pre_build:
-    commands:
-      # Discover and run unit tests in the '__tests__' directory
-      #- npm run test
-      # Remove all unit tests to reduce the size of the package that will be ultimately uploaded to Lambda
-      #- rm -rf ./__tests__
-      # Remove all dependencies not needed for the Lambda deployment package (the packages from devDependencies in package.json)
-      #- npm prune --production
+      - export # expose
+      - yum install -y jq
   build:
     commands:
-      - export # expose
       # try buildspecs
-      - yum install -y jq
-      - ls -l | egrep '^d' | awk '{print $9}' | xargs bash -x applied_build_spec.sh 
+      - ls -l | egrep '^d' | awk '{print $9}' | xargs -n1 bash -x applied_build_spec.sh 
       # merge em
       - mkdir tomerge
-      - find . -name template.yml | sed -e "p; s:/:__:g; s:^:tomerge/:g" | xargs -n2 cp
+      - find . -maxdepth 2 -name template.yml | sed -e "p; s:/:__:g; s:^:tomerge/:g" | xargs -n2 cp
       - npm install -g cloudformation-yml-merger-cli
       - cloudformation-yml-merger-cli -i tomerge -o tmp-merged-template.yml
       # apply tokens
@@ -28,20 +18,18 @@ phases:
       - rm -rf tomerge tmp-merged-template.yml
       - npm uninstall -g cloudformation-yml-merger-cli
       - mv merged-template.yml template.yml
-      - cat template.yml
-      # Use AWS SAM to package the application by using AWS CloudFormation
+      # PACKAGE
       #- aws cloudformation package --template merged-template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
-      - sam package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
-      # Use AWS SAM to install cruft
-      #- aws cloudformation deploy --capabilities CAPABILITY_IAM --template-file template-export.yml --stack-name mnp-t2
-      - echo ===========================================================naya==================================
-      - cat template-export.yml
-      - sam deploy --capabilities CAPABILITY_IAM --template-file template-export.yml --stack-name mnp-t2
-      # ======================F2======================
       # Use AWS SAM to package the application by using AWS CloudFormation
-      #- aws cloudformation package --template lambda-f2/template.yml --s3-bucket $S3_BUCKET --output-template lambda-f2/template-export.yml
+      - sam package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
+      - cat template-export.yml
+      # INSTALL
+      #- aws cloudformation deploy --capabilities CAPABILITY_IAM --template-file template-export.yml --stack-name ${APP_ID}
       # Use AWS SAM to install cruft
-      #- aws cloudformation deploy --capabilities CAPABILITY_IAM --template-file lambda-f2/template-export.yml --stack-name mnp-t2
+      - sam deploy --capabilities CAPABILITY_IAM --template-file template-export.yml --stack-name ${APP_ID}
+      - echo Success >out
+    finally:
+     - cat out || aws cloudformation describe-stack-events --stack-name ${APP_ID}
       
 artifacts:
   type: zip

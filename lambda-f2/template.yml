@@ -37,3 +37,12 @@ Resources:
       Policies:
         # Give Lambda basic execution Permission to the helloFromLambda
         - AWSLambdaBasicExecutionRole
+      Events:
+        helloFromLambdaF2FunctionApi:
+          Type: Api
+          Properties:
+            # restapi_TOKEN=!Ref BasicAWSApiGateway
+            RestApiId: restapi_TOKEN
+            Path: /lambda-f2
+            Method: GET
+

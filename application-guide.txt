@@ -1,0 +1,3 @@
+This mnp-t2 application can be initiated by following starting bit of this tutorial:
+
+https://docs.aws.amazon.com/lambda/latest/dg/applications-tutorial.html
